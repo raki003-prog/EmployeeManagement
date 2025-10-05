@@ -4,29 +4,32 @@ import java.util.List;
 
 public class EmployeeDAO {
     public void addEmployee(Employee emp) {
-        String check = "SELECT id FROM employees WHERE id = ?";
-        String query = "INSERT INTO employees (id, name, department, salary) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement checkStmt = conn.prepareStatement(check);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+    String check = "SELECT name FROM employees WHERE id = ?";
+    String query = "INSERT INTO employees (id, name, department, salary) VALUES (?, ?, ?, ?)";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement checkStmt = conn.prepareStatement(check);
+         PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            checkStmt.setInt(1, emp.getId());
-            ResultSet rs = checkStmt.executeQuery();
-            if (rs.next()) {
-                System.out.println("Employee ID already exists!");
-                return;
-            }
+        checkStmt.setInt(1, emp.getId());
+        ResultSet rs = checkStmt.executeQuery();
 
-            stmt.setInt(1, emp.getId());
-            stmt.setString(2, emp.getName());
-            stmt.setString(3, emp.getDepartment());
-            stmt.setDouble(4, emp.getSalary());
-            stmt.executeUpdate();
-            System.out.println("Employee added successfully!");
-        } catch (SQLException e) {
-            System.out.println("Error adding employee: " + e.getMessage());
+        if (rs.next()) {
+            String existingName = rs.getString("name");
+            System.out.println("Employee ID already exists for user: " + existingName);
+            return;
         }
+
+        stmt.setInt(1, emp.getId());
+        stmt.setString(2, emp.getName());
+        stmt.setString(3, emp.getDepartment());
+        stmt.setDouble(4, emp.getSalary());
+        stmt.executeUpdate();
+        System.out.println("✅ Employee added successfully!");
+    } catch (SQLException e) {
+        System.out.println("Error adding employee: " + e.getMessage());
     }
+}
+
 
     public List<Employee> getAllEmployees() {
         List<Employee> list = new ArrayList<>();
