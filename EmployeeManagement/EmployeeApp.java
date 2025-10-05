@@ -15,7 +15,7 @@ public class EmployeeApp {
             System.out.println("5. Exit");
             System.out.print("Enter your choice: ");
             int choice = sc.nextInt();
-            sc.nextLine(); // consume newline
+            sc.nextLine(); 
 
             switch (choice) {
                 case 1 -> {
