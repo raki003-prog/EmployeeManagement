@@ -12,7 +12,8 @@ public class EmployeeApp {
             System.out.println("2. View All Employees");
             System.out.println("3. Update Salary");
             System.out.println("4. Delete Employee");
-            System.out.println("5. Exit");
+            System.out.println("5. Search");
+            System.out.println("6. Exit");
             System.out.print("Enter your choice: ");
             int choice = sc.nextInt();
             sc.nextLine(); 
@@ -47,7 +48,15 @@ public class EmployeeApp {
                     int id = sc.nextInt();
                     dao.deleteEmployee(id);
                 }
+
                 case 5 -> {
+                     System.out.print("Enter ID to search: ");
+                    int id = sc.nextInt();
+                    dao.searchEmployeeById(id);
+                }
+
+
+                case 6 -> {
                     System.out.println("Goodbye!");
                     return;
                 }

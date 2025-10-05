@@ -51,6 +51,31 @@ public class EmployeeDAO {
         return list;
     }
 
+    public void searchEmployeeById(int id) {
+    String query = "SELECT * FROM employees WHERE id = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+
+        stmt.setInt(1, id);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            Employee emp = new Employee(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("department"),
+                rs.getDouble("salary")
+            );
+            System.out.println("Employee Found: " + emp);
+        } else {
+            System.out.println("No employee found with ID: " + id);
+        }
+    } catch (SQLException e) {
+        System.out.println("Error searching employee: " + e.getMessage());
+    }
+}
+
+
     public void updateSalary(int id, double newSalary) {
         String query = "UPDATE employees SET salary = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
